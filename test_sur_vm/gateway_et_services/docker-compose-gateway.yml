@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  mygateway:
+    image: skeres95250/alpine_gateway:latest
+    network_mode: host
+    environment:
+      server.port: 8888
+      spring.cloud.inetutils.timeout-seconds: 10
+      eureka.client.service-url.defaultZone: http://192.168.122.99:8761/eureka

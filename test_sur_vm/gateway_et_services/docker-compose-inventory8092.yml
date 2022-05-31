@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  inventory-microservice-8092:
+    image: skeres95250/alpine_inventory:latest
+    network_mode: host
+    environment:
+      server.port: 8092
+      logging.level.root: DEBUG
+      spring.cloud.inetutils.timeout-seconds: 10
+      eureka.client.service-url.defaultZone: http://192.168.122.99:8761/eureka

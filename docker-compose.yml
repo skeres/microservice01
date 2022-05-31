@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  eureka-server:
+    image: alpine/eureka:latest
+    ports:
+    - "8761:8761"
+    networks:
+      - ms-network
+  mygateway:
+    image: alpine/gateway:latest
+    ports:
+    - "8888:8888"
+    networks:
+      - ms-network
+    depends_on:
+      - eureka-server
+    environment:
+      server.port: 8888
+      #eureka.instance.hostname: http://eureka-server:8761/eureka/
+      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka
+  customer-microservice:
+    image: alpine/customer:latest
+    networks:
+      - ms-network
+    depends_on:
+      - mygateway
+    environment:
+      server.port: 8081
+      logging.level.root: DEBUG
+      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka
+  inventory-microservice:
+    image: alpine/inventory:latest
+    networks:
+      - ms-network
+    depends_on:
+      - mygateway
+    environment:
+      server.port: 8082
+      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka
+
+networks:
+  ms-network:
+    driver: c1e8c75e4048bridge
